@@ -1,0 +1,31 @@
+# .github/workflows/main.yml
+
+name: Node.js CI/CD Pipeline # Workflow එකේ නම
+
+on:
+  push:
+    branches: [ "main" ] # මේ workflow එක run වෙන්න ඕන 'main' branch එකට push කරාම
+
+jobs:
+  build-and-test: # Job එකේ නම
+    runs-on: ubuntu-latest # මේ job එක run වෙන්න ඕන පරිසරය (GitHub දෙන virtual server එකක්)
+
+    steps:
+      # Step 1: Code එක download කරගන්නවා
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Node.js install කරගන්නවා
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Node.js version එක
+
+      # Step 3: Project dependencies (express වගේ) install කරනවා
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Test command එක run කරනවා (අපේ package.json එකේ තියෙන)
+      # මේ step එක fail වුණොත්, pipeline එක නවතිනවා.
+      - name: Run Tests
+        run: npm test
